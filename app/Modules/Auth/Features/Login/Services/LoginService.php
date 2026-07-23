@@ -3,7 +3,7 @@
 namespace App\Modules\Auth\Features\Login\Services;
 
 use App\Modules\Auth\Features\Login\Dtos\LoginResultDto;
-use App\Modules\Auth\Repositories\UserRepository;
+use App\Modules\Auth\Domain\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
 
 class LoginService
@@ -18,7 +18,7 @@ class LoginService
 
         if (! $user || ! $this->userRepository->passwordMatches($user, $password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => [trans('messages.auth.credentials_incorrect')],
             ]);
         }
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Transaction\Dtos;
+namespace App\Modules\Transaction\Domain\Dtos;
 
-use App\Modules\Transaction\Enums\TransactionType;
+use App\Modules\Transaction\Domain\Enums\TransactionType;
 use Carbon\CarbonInterface;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;

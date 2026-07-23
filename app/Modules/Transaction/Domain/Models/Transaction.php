@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\Transaction\Models;
+namespace App\Modules\Transaction\Domain\Models;
 
 use App\Models\User;
-use App\Modules\Transaction\Enums\TransactionType;
+use App\Modules\Transaction\Domain\Enums\TransactionType;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

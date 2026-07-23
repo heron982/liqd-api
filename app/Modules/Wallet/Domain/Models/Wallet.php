@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Wallet\Models;
+namespace App\Modules\Wallet\Domain\Models;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Attributes\Fillable;

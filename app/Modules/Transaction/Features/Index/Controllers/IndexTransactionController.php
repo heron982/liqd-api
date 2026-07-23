@@ -2,7 +2,7 @@
 
 namespace App\Modules\Transaction\Features\Index\Controllers;
 
-use App\Modules\Transaction\Dtos\TransactionResponseDto;
+use App\Modules\Transaction\Domain\Dtos\TransactionResponseDto;
 use App\Modules\Transaction\Features\Index\Services\IndexTransactionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;

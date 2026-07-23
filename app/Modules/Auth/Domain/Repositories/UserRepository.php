@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Modules\Auth\Repositories;
+namespace App\Modules\Auth\Domain\Repositories;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;

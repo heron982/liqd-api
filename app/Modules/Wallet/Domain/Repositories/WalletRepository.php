@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Wallet\Repositories;
+namespace App\Modules\Wallet\Domain\Repositories;
 
-use App\Modules\Wallet\Models\Wallet;
+use App\Modules\Wallet\Domain\Models\Wallet;
 
 class WalletRepository
 {

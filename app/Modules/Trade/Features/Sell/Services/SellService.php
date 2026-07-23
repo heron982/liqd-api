@@ -5,10 +5,10 @@ namespace App\Modules\Trade\Features\Sell\Services;
 use App\Modules\Market\Features\BtcPrice\Services\BtcPriceService;
 use App\Modules\Shared\Helpers\MoneyHelper;
 use App\Modules\Trade\Features\Sell\Dtos\SellResultDto;
-use App\Modules\Transaction\Dtos\CreateTransactionDto;
-use App\Modules\Transaction\Enums\TransactionType;
-use App\Modules\Transaction\Repositories\TransactionRepository;
-use App\Modules\Wallet\Repositories\WalletRepository;
+use App\Modules\Transaction\Domain\Dtos\CreateTransactionDto;
+use App\Modules\Transaction\Domain\Enums\TransactionType;
+use App\Modules\Transaction\Domain\Repositories\TransactionRepository;
+use App\Modules\Wallet\Domain\Repositories\WalletRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -30,7 +30,7 @@ class SellService
 
             if ((float) $wallet->balance_btc < (float) $amountBtc) {
                 throw ValidationException::withMessages([
-                    'amount_btc' => ['Insufficient BTC balance.'],
+                    'amount_btc' => [trans('messages.trade.insufficient_btc_balance')],
                 ]);
             }
 

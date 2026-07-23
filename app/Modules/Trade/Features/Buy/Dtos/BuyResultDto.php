@@ -2,8 +2,8 @@
 
 namespace App\Modules\Trade\Features\Buy\Dtos;
 
-use App\Modules\Transaction\Models\Transaction;
-use App\Modules\Wallet\Models\Wallet;
+use App\Modules\Transaction\Domain\Models\Transaction;
+use App\Modules\Wallet\Domain\Models\Wallet;
 use Spatie\LaravelData\Data;
 
 class BuyResultDto extends Data

@@ -5,12 +5,12 @@ namespace Tests\Unit;
 use App\Modules\Market\Features\BtcPrice\Dtos\BtcPriceDto;
 use App\Modules\Market\Features\BtcPrice\Services\BtcPriceService;
 use App\Modules\Trade\Features\Sell\Services\SellService;
-use App\Modules\Transaction\Dtos\CreateTransactionDto;
-use App\Modules\Transaction\Enums\TransactionType;
-use App\Modules\Transaction\Models\Transaction;
-use App\Modules\Transaction\Repositories\TransactionRepository;
-use App\Modules\Wallet\Models\Wallet;
-use App\Modules\Wallet\Repositories\WalletRepository;
+use App\Modules\Transaction\Domain\Dtos\CreateTransactionDto;
+use App\Modules\Transaction\Domain\Enums\TransactionType;
+use App\Modules\Transaction\Domain\Models\Transaction;
+use App\Modules\Transaction\Domain\Repositories\TransactionRepository;
+use App\Modules\Wallet\Domain\Models\Wallet;
+use App\Modules\Wallet\Domain\Repositories\WalletRepository;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 

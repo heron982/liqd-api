@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Modules\Transaction\Repositories;
+namespace App\Modules\Transaction\Domain\Repositories;
 
-use App\Modules\Transaction\Dtos\CreateTransactionDto;
-use App\Modules\Transaction\Models\Transaction;
+use App\Modules\Transaction\Domain\Dtos\CreateTransactionDto;
+use App\Modules\Transaction\Domain\Models\Transaction;
 use Illuminate\Support\Collection;
 
 class TransactionRepository
