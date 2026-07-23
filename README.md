@@ -25,7 +25,6 @@ Todos prefixados com `/api`.
 ├── docker/
 │   ├── nginx/                 # config do reverse proxy
 │   └── php/                   # imagem PHP-FPM
-├── docs/
 ├── routes/api.php
 ├── database/migrations/
 └── app/Modules/               # domínio da aplicação
