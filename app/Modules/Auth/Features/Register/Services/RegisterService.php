@@ -3,8 +3,8 @@
 namespace App\Modules\Auth\Features\Register\Services;
 
 use App\Modules\Auth\Features\Register\Dtos\RegisterResultDto;
-use App\Modules\Auth\Domain\Repositories\UserRepository;
-use App\Modules\Wallet\Domain\Repositories\WalletRepository;
+use App\Modules\Auth\Shared\Repositories\UserRepository;
+use App\Modules\Wallet\Shared\Repositories\WalletRepository;
 use Illuminate\Support\Facades\DB;
 
 class RegisterService

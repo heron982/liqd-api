@@ -3,7 +3,7 @@
 namespace App\Modules\Auth\Features\Login\Services;
 
 use App\Modules\Auth\Features\Login\Dtos\LoginResultDto;
-use App\Modules\Auth\Domain\Repositories\UserRepository;
+use App\Modules\Auth\Shared\Repositories\UserRepository;
 use Illuminate\Validation\ValidationException;
 
 class LoginService

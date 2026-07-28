@@ -1,12 +1,17 @@
 <?php
 
-namespace App\Modules\Auth\Domain\Repositories;
+namespace App\Modules\Auth\Shared\Repositories;
 
 use App\Models\User;
+use App\Modules\Shared\Library\EloquentRepository\Adapters\EloquentRepositoryAdapter;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository
 {
+    public function __construct(
+        private readonly EloquentRepositoryAdapter $adapter,
+    ) {}
+
     /**
      * @param  array<string, mixed>  $data
      */
@@ -16,17 +21,22 @@ class UserRepository
             $data['password'] = Hash::make($data['password']);
         }
 
-        return User::query()->create($data);
+        /** @var User */
+        return $this->adapter->create(User::class, $data);
     }
 
     public function find(int $id): ?User
     {
-        return User::query()->find($id);
+        /** @var User|null */
+        return $this->adapter->find(User::class, $id);
     }
 
     public function findByEmail(string $email): ?User
     {
-        return User::query()->where('email', $email)->first();
+        /** @var User|null */
+        return $this->adapter->query(User::class)
+            ->where('email', $email)
+            ->first();
     }
 
     /**
@@ -38,15 +48,13 @@ class UserRepository
             $data['password'] = Hash::make($data['password']);
         }
 
-        $user->fill($data);
-        $user->save();
-
-        return $user->refresh();
+        /** @var User */
+        return $this->adapter->update($user, $data);
     }
 
     public function delete(User $user): bool
     {
-        return (bool) $user->delete();
+        return $this->adapter->delete($user);
     }
 
     public function passwordMatches(User $user, string $plainPassword): bool

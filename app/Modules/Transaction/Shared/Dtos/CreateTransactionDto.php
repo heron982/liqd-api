@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Transaction\Domain\Dtos;
+namespace App\Modules\Transaction\Shared\Dtos;
 
-use App\Modules\Transaction\Domain\Enums\TransactionType;
+use App\Modules\Transaction\Shared\Enums\TransactionType;
 use Spatie\LaravelData\Attributes\MapInputName;
 use Spatie\LaravelData\Attributes\MapOutputName;
 use Spatie\LaravelData\Data;

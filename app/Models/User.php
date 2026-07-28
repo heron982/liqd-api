@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Modules\Wallet\Domain\Models\Wallet;
+use App\Modules\Wallet\Shared\Models\Wallet;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;

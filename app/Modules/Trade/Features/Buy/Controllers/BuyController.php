@@ -4,7 +4,7 @@ namespace App\Modules\Trade\Features\Buy\Controllers;
 
 use App\Modules\Trade\Features\Buy\Requests\BuyRequest;
 use App\Modules\Trade\Features\Buy\Services\BuyService;
-use App\Modules\Trade\Domain\Dtos\TradeResponseDto;
+use App\Modules\Trade\Shared\Dtos\TradeResponseDto;
 use Illuminate\Http\JsonResponse;
 
 class BuyController

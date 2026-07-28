@@ -5,10 +5,10 @@ namespace App\Modules\Trade\Features\Sell\Services;
 use App\Modules\Market\Features\BtcPrice\Services\BtcPriceService;
 use App\Modules\Shared\Helpers\MoneyHelper;
 use App\Modules\Trade\Features\Sell\Dtos\SellResultDto;
-use App\Modules\Transaction\Domain\Dtos\CreateTransactionDto;
-use App\Modules\Transaction\Domain\Enums\TransactionType;
-use App\Modules\Transaction\Domain\Repositories\TransactionRepository;
-use App\Modules\Wallet\Domain\Repositories\WalletRepository;
+use App\Modules\Transaction\Shared\Dtos\CreateTransactionDto;
+use App\Modules\Transaction\Shared\Enums\TransactionType;
+use App\Modules\Transaction\Shared\Repositories\TransactionRepository;
+use App\Modules\Wallet\Shared\Repositories\WalletRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 

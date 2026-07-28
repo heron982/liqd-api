@@ -2,8 +2,8 @@
 
 namespace App\Modules\Wallet\Features\Show\Services;
 
-use App\Modules\Wallet\Domain\Models\Wallet;
-use App\Modules\Wallet\Domain\Repositories\WalletRepository;
+use App\Modules\Wallet\Shared\Models\Wallet;
+use App\Modules\Wallet\Shared\Repositories\WalletRepository;
 use App\Modules\Wallet\Features\Show\Dtos\WalletBalanceDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 

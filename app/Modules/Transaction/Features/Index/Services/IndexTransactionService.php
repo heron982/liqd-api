@@ -2,7 +2,7 @@
 
 namespace App\Modules\Transaction\Features\Index\Services;
 
-use App\Modules\Transaction\Domain\Repositories\TransactionRepository;
+use App\Modules\Transaction\Shared\Repositories\TransactionRepository;
 use Illuminate\Support\Collection;
 
 class IndexTransactionService
@@ -12,7 +12,7 @@ class IndexTransactionService
     ) {}
 
     /**
-     * @return Collection<int, \App\Modules\Transaction\Domain\Models\Transaction>
+     * @return Collection<int, \App\Modules\Transaction\Shared\Models\Transaction>
      */
     public function execute(int $userId): Collection
     {

@@ -2,7 +2,7 @@
 
 namespace App\Modules\Trade\Features\Sell\Controllers;
 
-use App\Modules\Trade\Domain\Dtos\TradeResponseDto;
+use App\Modules\Trade\Shared\Dtos\TradeResponseDto;
 use App\Modules\Trade\Features\Sell\Requests\SellRequest;
 use App\Modules\Trade\Features\Sell\Services\SellService;
 use Illuminate\Http\JsonResponse;

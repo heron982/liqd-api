@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Modules\Trade\Domain\Dtos;
+namespace App\Modules\Trade\Shared\Dtos;
 
-use App\Modules\Transaction\Domain\Dtos\TransactionResponseDto;
+use App\Modules\Transaction\Shared\Dtos\TransactionResponseDto;
 use Spatie\LaravelData\Data;
 
 class TradeResponseDto extends Data
