@@ -10,7 +10,6 @@ use App\Modules\Transaction\Shared\Enums\TransactionType;
 use App\Modules\Transaction\Shared\Repositories\TransactionRepository;
 use App\Modules\Wallet\Shared\Repositories\WalletRepository;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class SellService
 {
@@ -27,19 +26,12 @@ class SellService
         return DB::transaction(function () use ($userId, $amountBtc) {
             $wallet = $this->walletRepository->lockByUserId($userId);
             $btcPrice = $this->btcPriceService->execute()->price;
-
-            if ((float) $wallet->balance_btc < (float) $amountBtc) {
-                throw ValidationException::withMessages([
-                    'amount_btc' => [trans('messages.trade.insufficient_btc_balance')],
-                ]);
-            }
-
             $amountBrl = MoneyHelper::btcToBrl($amountBtc, $btcPrice);
 
-            $wallet = $this->walletRepository->update($wallet, [
-                'balance_btc' => MoneyHelper::roundBtc((float) $wallet->balance_btc - (float) $amountBtc),
-                'balance_brl' => MoneyHelper::roundBrl((float) $wallet->balance_brl + (float) $amountBrl),
-            ]);
+            $wallet->debitBtc($amountBtc);
+            $wallet->creditBrl($amountBrl);
+
+            $wallet = $this->walletRepository->save($wallet);
 
             $transaction = $this->transactionRepository->create(CreateTransactionDto::from([
                 'user_id' => $userId,

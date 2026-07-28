@@ -19,8 +19,8 @@ class SellController
         return response()->json(
             TradeResponseDto::from([
                 'wallet' => [
-                    'balance_brl' => (string) $result->wallet->balance_brl,
-                    'balance_btc' => (string) $result->wallet->balance_btc,
+                    'balance_brl' => $result->wallet->balanceBrl(),
+                    'balance_btc' => $result->wallet->balanceBtc(),
                 ],
                 'transaction' => $result->transaction,
             ])->toArray()

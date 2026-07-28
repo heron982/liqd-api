@@ -2,7 +2,7 @@
 
 namespace App\Modules\Wallet\Features\Show\Services;
 
-use App\Modules\Wallet\Shared\Models\Wallet;
+use App\Modules\Wallet\Shared\Entities\Wallet;
 use App\Modules\Wallet\Shared\Repositories\WalletRepository;
 use App\Modules\Wallet\Features\Show\Dtos\WalletBalanceDto;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -22,8 +22,8 @@ class ShowWalletService
         }
 
         return WalletBalanceDto::from([
-            'balance_brl' => (string) $wallet->balance_brl,
-            'balance_btc' => (string) $wallet->balance_btc,
+            'balance_brl' => $wallet->balanceBrl(),
+            'balance_btc' => $wallet->balanceBtc(),
         ]);
     }
 }

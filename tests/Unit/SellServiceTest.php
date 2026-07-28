@@ -9,20 +9,21 @@ use App\Modules\Transaction\Shared\Dtos\CreateTransactionDto;
 use App\Modules\Transaction\Shared\Enums\TransactionType;
 use App\Modules\Transaction\Shared\Models\Transaction;
 use App\Modules\Transaction\Shared\Repositories\TransactionRepository;
-use App\Modules\Wallet\Shared\Models\Wallet;
+use App\Modules\Wallet\Shared\Entities\Wallet;
+use App\Modules\Wallet\Shared\Exceptions\InsufficientBalanceException;
 use App\Modules\Wallet\Shared\Repositories\WalletRepository;
-use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
 class SellServiceTest extends TestCase
 {
     public function test_sell_debits_btc_credits_brl_and_records_transaction(): void
     {
-        $wallet = new Wallet([
-            'user_id' => 1,
-            'balance_brl' => '0.00',
-            'balance_btc' => '0.01000000',
-        ]);
+        $wallet = new Wallet(
+            id: 1,
+            userId: 1,
+            balanceBrl: '0.00',
+            balanceBtc: '0.01000000',
+        );
 
         $walletRepository = $this->createMock(WalletRepository::class);
         $walletRepository->expects($this->once())
@@ -30,12 +31,8 @@ class SellServiceTest extends TestCase
             ->with(1)
             ->willReturn($wallet);
         $walletRepository->expects($this->once())
-            ->method('update')
-            ->willReturnCallback(function (Wallet $current, array $data) {
-                $current->fill($data);
-
-                return $current;
-            });
+            ->method('save')
+            ->willReturnCallback(fn (Wallet $current) => $current);
 
         $transaction = new Transaction([
             'user_id' => 1,
@@ -65,22 +62,23 @@ class SellServiceTest extends TestCase
         $service = new SellService($walletRepository, $transactionRepository, $btcPriceService);
         $result = $service->execute(1, '0.01000000');
 
-        $this->assertSame('2500.00', (string) $result->wallet->balance_brl);
-        $this->assertSame('0.00000000', (string) $result->wallet->balance_btc);
+        $this->assertSame('2500.00', $result->wallet->balanceBrl());
+        $this->assertSame('0.00000000', $result->wallet->balanceBtc());
         $this->assertSame(TransactionType::Sell, $result->transaction->type);
     }
 
     public function test_sell_fails_when_btc_balance_is_insufficient(): void
     {
-        $wallet = new Wallet([
-            'user_id' => 1,
-            'balance_brl' => '0.00',
-            'balance_btc' => '0.00100000',
-        ]);
+        $wallet = new Wallet(
+            id: 1,
+            userId: 1,
+            balanceBrl: '0.00',
+            balanceBtc: '0.00100000',
+        );
 
         $walletRepository = $this->createMock(WalletRepository::class);
         $walletRepository->method('lockByUserId')->willReturn($wallet);
-        $walletRepository->expects($this->never())->method('update');
+        $walletRepository->expects($this->never())->method('save');
 
         $transactionRepository = $this->createMock(TransactionRepository::class);
         $transactionRepository->expects($this->never())->method('create');
@@ -90,7 +88,7 @@ class SellServiceTest extends TestCase
 
         $service = new SellService($walletRepository, $transactionRepository, $btcPriceService);
 
-        $this->expectException(ValidationException::class);
+        $this->expectException(InsufficientBalanceException::class);
         $service->execute(1, '1.00000000');
     }
 }
