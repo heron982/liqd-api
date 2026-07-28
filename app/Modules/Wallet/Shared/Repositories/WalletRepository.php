@@ -2,6 +2,7 @@
 
 namespace App\Modules\Wallet\Shared\Repositories;
 
+use App\Modules\Shared\Helpers\CacheHelper;
 use App\Modules\Shared\Helpers\MoneyHelper;
 use App\Modules\Shared\Library\EloquentRepository\Adapters\EloquentRepositoryAdapter;
 use App\Modules\Wallet\Shared\Entities\Wallet;
@@ -10,9 +11,16 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class WalletRepository
 {
+    private const CACHE_TTL_SECONDS = 60;
+
     public function __construct(
         private readonly EloquentRepositoryAdapter $adapter,
     ) {}
+
+    public static function showCacheKey(int $userId): string
+    {
+        return "wallet:user:{$userId}";
+    }
 
     /**
      * @param  array<string, mixed>  $data
@@ -21,8 +29,11 @@ class WalletRepository
     {
         /** @var WalletModel $model */
         $model = $this->adapter->create(WalletModel::class, $data);
+        $wallet = $this->toEntity($model);
 
-        return $this->toEntity($model);
+        CacheHelper::forget(self::showCacheKey($wallet->userId()));
+
+        return $wallet;
     }
 
     public function find(int $id): ?Wallet
@@ -35,12 +46,39 @@ class WalletRepository
 
     public function findByUserId(int $userId): ?Wallet
     {
-        /** @var WalletModel|null $model */
-        $model = $this->adapter->query(WalletModel::class)
-            ->where('user_id', $userId)
-            ->first();
+        /** @var array{id: int, user_id: int, balance_brl: string, balance_btc: string}|null $data */
+        $data = CacheHelper::remember(
+            self::showCacheKey($userId),
+            self::CACHE_TTL_SECONDS,
+            function () use ($userId) {
+                /** @var WalletModel|null $model */
+                $model = $this->adapter->query(WalletModel::class)
+                    ->where('user_id', $userId)
+                    ->first();
 
-        return $model ? $this->toEntity($model) : null;
+                if (! $model) {
+                    return null;
+                }
+
+                return [
+                    'id' => (int) $model->id,
+                    'user_id' => (int) $model->user_id,
+                    'balance_brl' => MoneyHelper::roundBrl((string) $model->balance_brl),
+                    'balance_btc' => MoneyHelper::roundBtc((string) $model->balance_btc),
+                ];
+            },
+        );
+
+        if ($data === null) {
+            return null;
+        }
+
+        return new Wallet(
+            id: $data['id'],
+            userId: $data['user_id'],
+            balanceBrl: $data['balance_brl'],
+            balanceBtc: $data['balance_btc'],
+        );
     }
 
     public function lockByUserId(int $userId): Wallet
@@ -73,7 +111,11 @@ class WalletRepository
             'balance_btc' => $wallet->balanceBtc(),
         ]);
 
-        return $this->toEntity($model);
+        $entity = $this->toEntity($model);
+
+        CacheHelper::forget(self::showCacheKey($entity->userId()));
+
+        return $entity;
     }
 
     public function delete(Wallet $wallet): bool
@@ -85,7 +127,17 @@ class WalletRepository
         /** @var WalletModel|null $model */
         $model = $this->adapter->find(WalletModel::class, $wallet->id());
 
-        return $model ? $this->adapter->delete($model) : false;
+        if (! $model) {
+            return false;
+        }
+
+        $deleted = $this->adapter->delete($model);
+
+        if ($deleted) {
+            CacheHelper::forget(self::showCacheKey($wallet->userId()));
+        }
+
+        return $deleted;
     }
 
     private function toEntity(WalletModel $model): Wallet

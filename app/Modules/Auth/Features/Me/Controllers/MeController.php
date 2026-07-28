@@ -2,19 +2,16 @@
 
 namespace App\Modules\Auth\Features\Me\Controllers;
 
+use App\Modules\Auth\Features\Me\Services\MeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class MeController
 {
-    public function execute(Request $request): JsonResponse
+    public function execute(Request $request, MeService $service): JsonResponse
     {
-        $user = $request->user();
-
-        return response()->json([
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-        ]);
+        return response()->json(
+            $service->execute($request->user()->id)->toArray()
+        );
     }
 }

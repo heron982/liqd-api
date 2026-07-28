@@ -120,6 +120,32 @@ class TradeTest extends TestCase
             ->assertJsonPath('data.0.type', 'buy');
     }
 
+    public function test_transactions_history_cache_is_invalidated_after_trade(): void
+    {
+        $user = $this->actingUser(brl: 10000, btc: 0.01);
+        $this->freezePrice('200000.00');
+
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/trade/buy', ['amount_brl' => 2000])
+            ->assertOk();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/transactions')
+            ->assertOk()
+            ->assertJsonCount(1, 'data');
+
+        $this->actingAs($user, 'sanctum')
+            ->postJson('/api/trade/sell', ['amount_btc' => 0.005])
+            ->assertOk();
+
+        $this->actingAs($user, 'sanctum')
+            ->getJson('/api/transactions')
+            ->assertOk()
+            ->assertJsonCount(2, 'data')
+            ->assertJsonPath('data.0.type', 'sell')
+            ->assertJsonPath('data.1.type', 'buy');
+    }
+
     public function test_btc_price_service_uses_cache(): void
     {
         CacheHelper::forget(BtcPriceService::CACHE_KEY);
